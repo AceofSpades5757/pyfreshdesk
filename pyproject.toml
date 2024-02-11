@@ -7,7 +7,7 @@ name = "pyfreshdesk"
 version = "0.1.0"
 description = "Python client for Freshdesk API."
 requires-python = ">=3.6"
-license = "MIT"
+license = { file = "LICENSE" }
 authors = [
     { name = "Kyle L. Davis", email = "kyle.l.davis57@gmail.com" },
 ]
