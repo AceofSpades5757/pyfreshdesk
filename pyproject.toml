@@ -1,0 +1,53 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyfreshdesk"
+version = "0.1.0"
+description = "Python client for Freshdesk API."
+requires-python = ">=3.6"
+license = "MIT"
+authors = [
+    { name = "Kyle L. Davis", email = "kyle.l.davis57@gmail.com" },
+]
+maintainers = [
+    { name = "Kyle L. Davis", email = "kyle.l.davis57@gmail.com" },
+]
+readme = "README.md"
+keywords = ["freshdesk", "api", "client"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.6",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3 :: Only",
+    "Operating System :: OS Independent",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "requests",
+    "python-dateutil",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pre-commit",
+]
+
+[project.urls]
+Homepage = "https://github.com/AceofSpades5757/pyfreshdesk"
+Documentation = "https://github.com/AceofSpades5757/pyfreshdesk/blob/main/README.md""
+Repository = "https://github.com/AceofSpades5757/pyfreshdesk"
+Issues = "https://github.com/AceofSpades5757/pyfreshdesk/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
