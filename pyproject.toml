@@ -49,7 +49,7 @@ dev = [
 
 [project.urls]
 Homepage = "https://github.com/AceofSpades5757/pyfreshdesk"
-Documentation = "https://github.com/AceofSpades5757/pyfreshdesk/blob/main/README.md""
+Documentation = "https://github.com/AceofSpades5757/pyfreshdesk/blob/main/README.md"
 Repository = "https://github.com/AceofSpades5757/pyfreshdesk"
 Issues = "https://github.com/AceofSpades5757/pyfreshdesk/issues"
 
