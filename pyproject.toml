@@ -40,7 +40,11 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
+    # CI Tool
     "pre-commit",
+    # For Builing
+    "setuptools",
+    "wheel",
 ]
 
 [project.urls]
