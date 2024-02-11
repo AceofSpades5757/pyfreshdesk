@@ -45,6 +45,8 @@ dev = [
     # For Builing
     "setuptools",
     "build",
+    # For Publishing
+    "twine",
 ]
 
 [project.urls]

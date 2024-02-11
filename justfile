@@ -46,6 +46,9 @@ clean: mostlyclean
 build: venv
     {{VENV_PYTHON}} -m build
 
+publish: build
+    {{VENV_PYTHON}} -m twine --upload dist/*
+
 
 _venv:
     {{PYTHON}} -m pip install --upgrade pip
