@@ -5,8 +5,6 @@
 [![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pyfreshdesk?label=Python%20Version&logo=python&logoColor=yellow)](https://pypi.org/project/pyfreshdesk/)
 [![PyPI - License](https://img.shields.io/pypi/l/pyfreshdesk?color=green)](https://github.com/AceofSpades5757/pyfreshdesk/blob/main/LICENSE)
 
-[![Tests](https://github.com/AceofSpades5757/pyfreshdesk/actions/workflows/test.yml/badge.svg)](https://github.com/AceofSpades5757/pyfreshdesk/actions/workflows/test.yml)
-
 [![Read the Docs](https://img.shields.io/readthedocs/pyfreshdesk)](https://pyfreshdesk.readthedocs.io/en/latest/)
 
 # Description

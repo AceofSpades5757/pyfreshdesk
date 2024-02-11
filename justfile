@@ -16,9 +16,6 @@ all: venv
 venv:
     @[ -d {{VENV}} ] || just _venv
 
-test: venv
-    {{VENV_PYTHON}} -m pytest tests --verbose
-
 alias fmt := format
 format: venv
 	@echo "Running CI pipline for formatting."
