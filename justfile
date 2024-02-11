@@ -43,6 +43,9 @@ clean: mostlyclean
     rm -rf ./build
     rm -rf ./dist
 
+build: venv
+    {{VENV_PYTHON}} -m build
+
 
 _venv:
     {{PYTHON}} -m pip install --upgrade pip

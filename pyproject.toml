@@ -45,6 +45,7 @@ dev = [
     # For Builing
     "setuptools",
     "wheel",
+    "build",
 ]
 
 [project.urls]
