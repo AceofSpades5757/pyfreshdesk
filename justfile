@@ -42,12 +42,6 @@ clean: mostlyclean
     rm -rf ./build
     rm -rf ./dist
 
-solutions-formatters: venv
-    {{VENV_PYTHON}} ./scripts/solutions_formatters.py
-
-solutions-alerts: venv
-    {{VENV_PYTHON}} ./scripts/solutions_alerts.py
-
 
 _venv:
     {{PYTHON}} -m pip install --upgrade pip
