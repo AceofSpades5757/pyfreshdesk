@@ -7,6 +7,7 @@ from types import SimpleNamespace
 from typing import Final
 
 import requests
+from requests.models import Response
 from freshdesk.base import BaseClient
 from freshdesk.enumerators import APIVersion
 from freshdesk.enumerators import HTTPRequestMethod
@@ -15,7 +16,6 @@ from freshdesk.enumerators import Resource
 from freshdesk.logger import get_config
 from freshdesk.store import LimitInfo
 from freshdesk.store import LimitStore
-from requests.models import Response
 
 
 ENCODING: Final[str] = "utf-8"
