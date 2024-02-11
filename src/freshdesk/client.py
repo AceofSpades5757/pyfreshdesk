@@ -21,7 +21,7 @@ from freshdesk.store import LimitStore
 ENCODING: Final[str] = "utf-8"
 data_path = Path(__file__).parent.parent / "data"
 data_path.mkdir(exist_ok=True)
-store: Final[LimitStore] = LimitStore(str(data_path / "limits.db"))
+STORE: Final[LimitStore] = LimitStore(str(data_path / "limits.db"))
 
 
 # Logging
@@ -131,7 +131,7 @@ class UnregisteredClient(BaseClient):
 
         # Store Limits
         self.limits.append(limits)
-        store.insert(limits)
+        STORE.insert(limits)
 
         # Pagination, if applicable
         # The 'link' header in the response will hold the next page url if
