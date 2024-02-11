@@ -2,7 +2,7 @@ PYTHON := if os_family() == "windows" {"py"} else {"python3"}
 VENV := ".venv"
 VENV_BIN := VENV + if os_family() == "windows" {"/Scripts"} else {"/bin"}
 VENV_PYTHON := VENV_BIN + "/python"
-VENV_PIP := VENV_BIN + " -m pip"
+VENV_PIP := VENV_PYTHON + " -m pip"
 
 _default: help
 
