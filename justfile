@@ -2,6 +2,7 @@ PYTHON := if os_family() == "windows" {"py"} else {"python3"}
 VENV := ".venv"
 VENV_BIN := VENV + if os_family() == "windows" {"/Scripts"} else {"/bin"}
 VENV_PYTHON := VENV_BIN + "/python"
+VENV_PIP := VENV_BIN + " -m pip"
 
 _default: help
 
@@ -47,6 +48,5 @@ _venv:
     {{PYTHON}} -m pip install --upgrade pip
     {{PYTHON}} -m pip install --upgrade virtualenv
     {{PYTHON}} -m virtualenv {{VENV}}
-    {{VENV_PYTHON}} -m pip install --upgrade pip
-    {{VENV_PYTHON}} -m pip install --requirement requirements.txt
-    {{VENV_PYTHON}} -m pip install --requirement requirements-dev.txt
+    {{VENV_PIP}} install --upgrade pip
+    {{VENV_PIP}} install .[dev]
