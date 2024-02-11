@@ -47,7 +47,7 @@ build: venv
     {{VENV_PYTHON}} -m build
 
 publish: build
-    {{VENV_PYTHON}} -m twine --upload dist/*
+    {{VENV_PYTHON}} -m twine upload dist/*
 
 
 _venv:
