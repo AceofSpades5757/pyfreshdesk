@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import logging.config
+import os
 from datetime import datetime
 from pathlib import Path
 from types import SimpleNamespace
 from typing import Final
+from typing import Optional
 
 import requests
 from requests.models import Response
@@ -42,7 +44,7 @@ class UnregisteredClient(BaseClient):
     def __init__(
         self,
         domain: str,
-        api_key: str,
+        api_key: Optional[str] = None,
         plan: Plan = Plan.BLOSSOM,
         version: APIVersion = APIVersion(2),
     ):
@@ -52,7 +54,13 @@ class UnregisteredClient(BaseClient):
         self.plan = plan
         self.version = version
 
-        self.api_key = api_key
+        if api_key is None:
+            key = os.environ.get("FRESHDESK_API_KEY")
+            if key is None:
+                raise ValueError("API Key is required.")
+            self.api_key: str = key
+        else:
+            self.api_key: str = api_key
 
         self.history: list[Response] = []
 
