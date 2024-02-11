@@ -21,7 +21,7 @@ from freshdesk.store import LimitStore
 ENCODING: Final[str] = "utf-8"
 data_path = Path(__file__).parent.parent / "data"
 data_path.mkdir(exist_ok=True)
-store: Final[LimitStore] = LimitStore(data_path / "limits.db")
+store: Final[LimitStore] = LimitStore(str(data_path / "limits.db"))
 
 
 # Logging
