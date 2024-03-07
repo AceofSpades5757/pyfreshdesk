@@ -18,6 +18,7 @@ from freshdesk.constants import MAX_PAGES
 from freshdesk.constants import MAX_SEARCH_RESULTS
 from freshdesk.constants import RE_FRESHDESK_ARTICLE_URL
 from freshdesk.constants import RESULTS_PER_PAGE
+from freshdesk.errors import AuthenticationError
 from freshdesk.errors import DraftLockedError
 from freshdesk.errors import NotFoundError
 from freshdesk.logger import get_config
@@ -111,6 +112,7 @@ __all__ = (
     "get_date_range_query",
     "get_remaining_search_results",
     # Exceptions
+    "AuthenticationError",
     "DraftLockedError",
     "NotFoundError",
 )
