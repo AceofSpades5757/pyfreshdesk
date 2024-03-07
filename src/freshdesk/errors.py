@@ -8,3 +8,7 @@ class DraftLockedError(Exception):
 
 class NotFoundError(Exception):
     """Resource not found."""
+
+
+class AuthenticationError(Exception):
+    """Authentication failed."""
