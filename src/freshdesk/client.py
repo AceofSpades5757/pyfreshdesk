@@ -11,6 +11,7 @@ from typing import Optional
 import requests
 from requests.models import Response
 from freshdesk.base import BaseClient
+from freshdesk.errors import AuthenticationError
 from freshdesk.enumerators import APIVersion
 from freshdesk.enumerators import HTTPRequestMethod
 from freshdesk.enumerators import Plan
@@ -48,6 +49,14 @@ class UnregisteredClient(BaseClient):
         plan: Plan = Plan.BLOSSOM,
         version: APIVersion = APIVersion(2),
     ):
+        """Initialize Freshdesk Client.
+
+        Raises
+        ------
+        AuthenticationError
+            If API key is not provided or the environment variable for the API
+            key is not set.
+        """
         logger.info("Initializing Freshdesk Client.")
 
         self.domain = domain
@@ -57,7 +66,11 @@ class UnregisteredClient(BaseClient):
         if api_key is None:
             key = os.environ.get("FRESHDESK_API_KEY")
             if key is None:
-                raise ValueError("API Key is required.")
+                raise AuthenticationError(
+                    "API Key is required."
+                    " Please set the FRESHDESK_API_KEY environment variable or"
+                    " pass the API key as an argument to the `api_key` parameter."
+                )
             self.api_key: str = key
         else:
             self.api_key: str = api_key
