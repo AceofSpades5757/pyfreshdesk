@@ -45,7 +45,7 @@ class Attachment:
     # catch any additional fields
     extras: dict[str, Any] = field(default_factory=dict)
 
-    _json: Optional[dict] = None
+    _json: Optional[dict] = field(default=None, repr=False)
 
     @classmethod
     def from_json(cls, data: dict) -> Attachment:
@@ -140,7 +140,7 @@ class Ticket:
     associated_tickets_list: list[int] = field(default_factory=list)
     source_additional_info: Optional[None] = None
 
-    _json: Optional[dict] = None
+    _json: Optional[dict] = field(default=None, repr=False)
 
     @classmethod
     def from_json(cls, data) -> Ticket:
@@ -205,7 +205,7 @@ class TicketConversation:
     last_edited_at: Optional[datetime]
     last_edited_user_id: Optional[int]
 
-    _json: Optional[dict[Any, Any]] = None
+    _json: Optional[dict] = field(default=None, repr=False)
 
     @classmethod
     def from_json(cls, data):
@@ -292,7 +292,7 @@ class CannedResponse:
 
     attachments: list[Attachment] = field(default_factory=list)
 
-    _json: Optional[dict[Any, Any]] = None
+    _json: Optional[dict] = field(default=None, repr=False)
 
     @classmethod
     def from_json(cls, data: dict):
@@ -782,7 +782,7 @@ class Contact:
 
     avatar: Optional[dict] = None
 
-    _json: Optional[dict] = None  # Custom
+    _json: Optional[dict] = field(default=None, repr=False)
 
     @classmethod
     def from_json(cls, data):
@@ -819,7 +819,7 @@ class Agent:
     # Role IDs
     role_ids: list[int] = field(default_factory=list)
 
-    _json: Optional[dict] = None  # Custom
+    _json: Optional[dict] = field(default=None, repr=False)
 
     # Any extra arguments get put in here.
     extras: dict[str, Any] = field(default_factory=dict)
