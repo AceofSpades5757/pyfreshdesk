@@ -799,7 +799,7 @@ class Agent:
     available_since: datetime
     id: int  # unique
     occasional: bool  # True: occasional, False: full-time
-    signature: str  # HTML
+    signature: str  = field(repr=False)  # HTML
     ticket_scope: int  # Permissions: 1 - Global, 2 - Group, 3 - Restricted
     # support_agent -> Support Agent
     # field_agent -> Field Agent
