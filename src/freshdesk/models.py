@@ -142,22 +142,36 @@ class Ticket:
 
     _json: Optional[dict] = field(default=None, repr=False)
 
+    # Any extra arguments should be put in here.
+    extras: dict[str, Any] = field(default_factory=dict)
+
     @classmethod
     def from_json(cls, data) -> Ticket:
-        obj = cls(**data)
+        copied = deepcopy(data)
+
+        # Extras
+        copied["extras"] = {}
+        for key in list(copied.keys()):
+            if key not in cls.__dataclass_fields__:
+                copied["extras"][key] = copied.pop(key)
+
+        obj = cls(**copied)
+
         # Parse datetime strings into datetime objects
         for attr in ["created_at", "updated_at", "due_by", "fr_due_by"]:
-            if data.get(attr):
-                setattr(obj, attr, datetime.fromisoformat(data[attr][:-1]))
+            if copied.get(attr):
+                setattr(obj, attr, datetime.fromisoformat(copied[attr][:-1]))
         # Parse Status
-        if data.get("status"):
-            obj.status = TicketStatus(data["status"])
+        if copied.get("status"):
+            obj.status = TicketStatus(copied["status"])
         # Parse Attachments
-        if data.get("attachments"):
+        if copied.get("attachments"):
             obj.attachments = [
-                Attachment.from_json(a) for a in data["attachments"]
+                Attachment.from_json(a) for a in copied["attachments"]
             ]
+
         obj._json = data
+
         return obj
 
     def to_json(self):
