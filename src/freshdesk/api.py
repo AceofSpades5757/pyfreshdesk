@@ -1,6 +1,6 @@
 """APIs for Freshdesk."""
 import logging.config
-from typing import Any
+from typing import Any, Literal
 from typing import Optional
 from typing import TypedDict
 from typing import Union
@@ -51,6 +51,11 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
+ListAllTicketsFilter = Literal["new_and_my_open", "watching", "spam", "deleted"]  # type alias
+ListAllTicketsSort = Literal["created_at", "updated_at", "due_by", "status"]  # type alias
+ListAllTicketsEmbed = Literal["stats", "requester", "description"]  # type alias
+
+
 class TicketAPI(BaseAPI):
     name = "tickets"
     path = "/tickets"
@@ -78,8 +83,52 @@ class TicketAPI(BaseAPI):
 
         return ticket
 
-    def list_all(self):
+
+    @register_interface
+    def tickets(
+            self,
+            filter: Optional[ListAllTicketsFilter] = None,
+            sort_by: Optional[ListAllTicketsSort] = None,
+            ascending: Optional[bool] = None,
+            embed: Optional[ListAllTicketsEmbed] = None,
+        ):
+        """List all tickets.
+
+        Parameters
+        ----------
+        filter : Optional[ListAllTicketsFilter]
+            Filter tickets by a predefined filter (per Freshdesk)
+        sort_by : Optional[ListAllTicketsSort]
+            Sort tickets by a field.
+            Default sort order is `created_at` (per Freshdesk)
+        ascending : Optional[bool]
+            Sort in ascending order.
+            Default is descending order (per Freshdesk)
+        embed : Optional[ListAllTicketsEmbed]
+            Embed additional details in response.
+            WARNING: Each include will consume an additional **2** credits.
+        """
         url = self.base_url
+
+        # Options
+        if any([filter, sort_by, ascending]):
+            url += "/?"
+        if filter:
+            url += f"filter={filter}&"
+        if sort_by:
+            url += f"order_by={sort_by}&"
+        if ascending is not None:
+            if ascending:
+                url += "order_type=asc&"
+            else:
+                url += "order_type=desc&"
+        if embed:
+            url += f"include={embed}&"
+
+        # Clean Up
+        if url.endswith("&"):
+            url = url[:-1]
+
         response = self._request(url, HTTPRequestMethod.GET)
 
         data = response.json()
@@ -87,6 +136,7 @@ class TicketAPI(BaseAPI):
 
         return tickets
 
+    @register_interface
     def filter_tickets(
         self, query: Optional[Union[str, Field]] = None, page: int = 1
     ) -> SearchResults:
@@ -143,16 +193,6 @@ class TicketAPI(BaseAPI):
     def update_ticket(self, ticket_id: int, data: dict[str, Any]) -> Ticket:
         """Update a ticket based on ID and data."""
         return self.update_ticket_(ticket_id, data)
-
-    @register_interface
-    def tickets(self, query: Field = None) -> list[Ticket]:  # type: ignore
-        """Get all tickets or filter by query."""
-        if query is None:
-            logging.info("Getting all tickets.")
-            return self.list_all()
-        else:
-            logging.info(f"Getting tickets with query: {query!r}")
-            return self.filter_tickets(query)["results"]
 
     @register_interface
     def ticket(self, ticket_id: int) -> Ticket:
