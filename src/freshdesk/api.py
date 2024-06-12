@@ -206,6 +206,7 @@ class TicketAPI(BaseAPI):
         )
 
         data = response.json()
+        data['id'] = ticket_id
         updated_ticket: Ticket = Ticket.from_json(data)
 
         return updated_ticket
