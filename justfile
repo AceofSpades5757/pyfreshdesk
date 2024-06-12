@@ -27,11 +27,11 @@ format-update: venv
 
 mostlyclean:
     # build files
-    fd --no-ignore --glob *.egg-info --exec rm -rf
+    -fd --no-ignore --glob *.egg-info --exec rm -rf
     # log files
-    fd --no-ignore --glob *.log --exec rm -rf
+    -fd --no-ignore --glob *.log --exec rm -rf
     # cache files
-    fd --no-ignore --glob __pycache__ --exec rm -rf
+    -fd --no-ignore --glob __pycache__ --exec rm -rf
 
 clean: mostlyclean
     # virtual env dirs
@@ -52,4 +52,4 @@ _venv:
     {{PYTHON}} -m pip install --upgrade virtualenv
     {{PYTHON}} -m virtualenv {{VENV}}
     {{VENV_PIP}} install --upgrade pip
-    {{VENV_PIP}} install -e .[dev]
+    {{VENV_PIP}} install --editable .[dev]
