@@ -91,6 +91,9 @@ class TicketAPI(BaseAPI):
             sort_by: Optional[ListAllTicketsSort] = None,
             ascending: Optional[bool] = None,
             embed: Optional[ListAllTicketsEmbed] = None,
+            # Pagination
+            page: Optional[int] = None,
+            per_page: Optional[int] = None,
         ):
         """List all tickets.
 
@@ -107,12 +110,24 @@ class TicketAPI(BaseAPI):
         embed : Optional[ListAllTicketsEmbed]
             Embed additional details in response.
             WARNING: Each include will consume an additional **2** credits.
+
+        Pagination
+        ==========
+        page : Optional[int]
+            The page number to retrieve.
+            The default is 1 (per Freshdesk)
+        per_page : Optional[int]
+            The number of tickets per page.
+            The default is 30 (per Freshdesk)
+            The max is 100 (per Freshdesk)
         """
         url = self.base_url
 
         # Options
-        if any([filter, sort_by, ascending]):
-            url += "/?"
+        if any([filter, sort_by, ascending, embed, page, per_page]):
+            url += "?"
+
+        # Options - Base
         if filter:
             url += f"filter={filter}&"
         if sort_by:
@@ -124,6 +139,12 @@ class TicketAPI(BaseAPI):
                 url += "order_type=desc&"
         if embed:
             url += f"include={embed}&"
+
+        # Options - Pagination
+        if page:
+            url += f"page={page}&"
+        if per_page:
+            url += f"per_page={per_page}&"
 
         # Clean Up
         if url.endswith("&"):
