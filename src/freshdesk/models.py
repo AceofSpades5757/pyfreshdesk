@@ -57,7 +57,11 @@ class Attachment:
             created_at=datetime.fromisoformat(data["created_at"][:-1]),
             updated_at=datetime.fromisoformat(data["updated_at"][:-1]),
             attachment_url=data["attachment_url"],
-            extras={key: value for key, value in data.items() if key not in cls.__dataclass_fields__},  # noqa: 501
+            extras={
+                key: value
+                for key, value in data.items()
+                if key not in cls.__dataclass_fields__
+            },  # noqa: 501
         )
         obj._json = data
 
@@ -66,6 +70,7 @@ class Attachment:
 
 class TicketStatus(IntEnum):
     """The status of a ticket."""
+
     OPEN = 2
     PENDING = 3
     RESOLVED = 4
@@ -142,22 +147,36 @@ class Ticket:
 
     _json: Optional[dict] = field(default=None, repr=False)
 
+    # Any extra arguments should be put in here.
+    extras: dict[str, Any] = field(default_factory=dict)
+
     @classmethod
     def from_json(cls, data) -> Ticket:
-        obj = cls(**data)
+        copied = deepcopy(data)
+
+        # Extras
+        copied["extras"] = {}
+        for key in list(copied.keys()):
+            if key not in cls.__dataclass_fields__:
+                copied["extras"][key] = copied.pop(key)
+
+        obj = cls(**copied)
+
         # Parse datetime strings into datetime objects
         for attr in ["created_at", "updated_at", "due_by", "fr_due_by"]:
-            if data.get(attr):
-                setattr(obj, attr, datetime.fromisoformat(data[attr][:-1]))
+            if copied.get(attr):
+                setattr(obj, attr, datetime.fromisoformat(copied[attr][:-1]))
         # Parse Status
-        if data.get("status"):
-            obj.status = TicketStatus(data["status"])
+        if copied.get("status"):
+            obj.status = TicketStatus(copied["status"])
         # Parse Attachments
-        if data.get("attachments"):
+        if copied.get("attachments"):
             obj.attachments = [
-                Attachment.from_json(a) for a in data["attachments"]
+                Attachment.from_json(a) for a in copied["attachments"]
             ]
+
         obj._json = data
+
         return obj
 
     def to_json(self):
@@ -388,7 +407,7 @@ class TicketFilter:
         Number: integer
         Checkbox: boolean
         Dropdown: string
-    
+
     Specs
     -----
 
@@ -799,7 +818,7 @@ class Agent:
     available_since: datetime
     id: int  # unique
     occasional: bool  # True: occasional, False: full-time
-    signature: str  = field(repr=False)  # HTML
+    signature: str = field(repr=False)  # HTML
     ticket_scope: int  # Permissions: 1 - Global, 2 - Group, 3 - Restricted
     # support_agent -> Support Agent
     # field_agent -> Field Agent
@@ -1169,4 +1188,3 @@ class ScenarioAutomation:
 
         obj = cls(**data)
         return obj
-

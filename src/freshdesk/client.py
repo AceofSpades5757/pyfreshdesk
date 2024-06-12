@@ -10,12 +10,13 @@ from typing import Optional
 
 import requests
 from requests.models import Response
+
 from freshdesk.base import BaseClient
-from freshdesk.errors import AuthenticationError
 from freshdesk.enumerators import APIVersion
 from freshdesk.enumerators import HTTPRequestMethod
 from freshdesk.enumerators import Plan
 from freshdesk.enumerators import Resource
+from freshdesk.errors import AuthenticationError
 from freshdesk.logger import get_config
 from freshdesk.store import LimitInfo
 from freshdesk.store import LimitStore

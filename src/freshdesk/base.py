@@ -41,8 +41,7 @@ class API(Protocol):
         cls.client = client
         ...
 
-    def _register_interfaces(self) -> None:
-        ...
+    def _register_interfaces(self) -> None: ...
 
 
 class Client(Protocol):
@@ -61,8 +60,7 @@ class Client(Protocol):
         ...
 
     @classmethod
-    def register_api(cls, api: Type[API]) -> None:
-        ...
+    def register_api(cls, api: Type[API]) -> None: ...
 
 
 class BaseClient(ABC):

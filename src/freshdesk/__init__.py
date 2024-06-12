@@ -77,6 +77,7 @@ __all__ = (
     "Agent",
     "CannedResponse",
     "CannedResponseFolder",
+    "Client",
     "Field",
     "Group",
     "Product",
