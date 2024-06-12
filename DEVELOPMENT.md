@@ -1,0 +1,35 @@
+Freshdesk has made some updates to their REST API.
+
+- [ ] [Global pagination](https://developer.freshdesk.com/api/#pagination)
+  - Works on endpoints that return a list of objects.
+    - List All Tickets
+    - List All Contacts
+  - [ ] Per Page: `https://domain.freshdesk.com/api/v2/contacts?per_page=<NUMBER:1 to 100>`
+  - [ ] Page: `https://domain.freshdesk.com/api/v2/contacts?page=<NUMBER>`
+  - The way this library was structured, it may need to simply be added per API endpoint that supports this...
+  - [ ] Identify existing endpoints that support this feature.
+- [ ] [List All Tickets](https://developer.freshdesk.com/api/#list_all_tickets)
+  - [ ] **Filters** were directly attached to this endpoint, in comparison to the filter endpoint that uses a special query.
+    - [ ] Predefined filters
+      - /api/v2/tickets?filter=[filter_name]
+      - The various filters available are new_and_my_open, watching, spam, deleted.
+    - [ ] Requester	/api/v2/tickets?requester_id=[id]
+      - /api/v2/tickets?email=[requester_email]
+      - /api/v2/tickets?unique_external_id=[requester_unique_external_id]
+      - Example:
+      - /api/v2/tickets?email=superman@freshdesk.com
+      - /api/v2/tickets?email=bat%2Bman%40gmail.com   (URL encoded bat+man@gmail.com)
+    - [ ] Company ID	/api/v2/tickets?company_id=[id]
+    - [ ] Updated since	/api/v2/tickets?updated_since=2015-01-19T02:00:00Z
+  - [ ] **Sorting**
+     - [ ] created_at, due_by, updated_at, status	/api/v2/tickets?order_by=created_at
+       - Default sort order is created_at
+     - [ ] asc, desc	/api/v2/tickets?order_type=asc
+       - Default sort order type is desc
+  - [~] **Embeds**: It looks like there's some ability to include more data in the response.
+    - [~] stats	/api/v2/tickets?include=stats
+      - Will return the ticket’s closed_at, resolved_at and first_responded_at time
+    - [~] requester	/api/v2/tickets?include=requester
+      - Will return the requester's email, id, mobile, name, and phone.
+    - [~] description	/api/v2/tickets?include=description
+      - Will return the ticket description and description_text.
