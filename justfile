@@ -52,4 +52,4 @@ _venv:
     {{PYTHON}} -m pip install --upgrade virtualenv
     {{PYTHON}} -m virtualenv {{VENV}}
     {{VENV_PIP}} install --upgrade pip
-    {{VENV_PIP}} install .[dev]
+    {{VENV_PIP}} install -e .[dev]
