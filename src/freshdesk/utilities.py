@@ -6,6 +6,7 @@ from datetime import timezone
 from typing import Optional
 
 import dateutil.parser
+
 from freshdesk.api import SearchResults
 from freshdesk.client import UnregisteredClient as FreshdeskClient
 from freshdesk.constants import MAX_PAGES

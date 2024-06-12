@@ -1,6 +1,6 @@
-from enum import auto
 from enum import Enum
 from enum import IntEnum
+from enum import auto
 from types import SimpleNamespace
 
 

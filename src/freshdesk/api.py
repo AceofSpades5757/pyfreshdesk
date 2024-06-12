@@ -1,6 +1,8 @@
 """APIs for Freshdesk."""
+
 import logging.config
-from typing import Any, Literal
+from typing import Any
+from typing import Literal
 from typing import Optional
 from typing import TypedDict
 from typing import Union
@@ -51,9 +53,15 @@ logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 
 
-ListAllTicketsFilter = Literal["new_and_my_open", "watching", "spam", "deleted"]  # type alias
-ListAllTicketsSort = Literal["created_at", "updated_at", "due_by", "status"]  # type alias
-ListAllTicketsEmbed = Literal["stats", "requester", "description"]  # type alias
+ListAllTicketsFilter = Literal[
+    "new_and_my_open", "watching", "spam", "deleted"
+]  # type alias
+ListAllTicketsSort = Literal[
+    "created_at", "updated_at", "due_by", "status"
+]  # type alias
+ListAllTicketsEmbed = Literal[
+    "stats", "requester", "description"
+]  # type alias
 
 
 class TicketAPI(BaseAPI):
@@ -83,18 +91,17 @@ class TicketAPI(BaseAPI):
 
         return ticket
 
-
     @register_interface
     def tickets(
-            self,
-            filter: Optional[ListAllTicketsFilter] = None,
-            sort_by: Optional[ListAllTicketsSort] = None,
-            ascending: Optional[bool] = None,
-            embed: Optional[ListAllTicketsEmbed] = None,
-            # Pagination
-            page: Optional[int] = None,
-            per_page: Optional[int] = None,
-        ):
+        self,
+        filter: Optional[ListAllTicketsFilter] = None,
+        sort_by: Optional[ListAllTicketsSort] = None,
+        ascending: Optional[bool] = None,
+        embed: Optional[ListAllTicketsEmbed] = None,
+        # Pagination
+        page: Optional[int] = None,
+        per_page: Optional[int] = None,
+    ):
         """List all tickets.
 
         Parameters
@@ -206,7 +213,7 @@ class TicketAPI(BaseAPI):
         )
 
         data = response.json()
-        data['id'] = ticket_id
+        data["id"] = ticket_id
         updated_ticket: Ticket = Ticket.from_json(data)
 
         return updated_ticket
@@ -927,7 +934,9 @@ class SolutionAPI(BaseAPI):
         categories: list[SolutionCategory] = self.list_all_solution_categories()  # type: ignore
         folders: list[SolutionFolder] = []
         for category in categories:
-            category_folders: list[SolutionFolder] = self.list_all_solution_folders(
+            category_folders: list[
+                SolutionFolder
+            ] = self.list_all_solution_folders(
                 category.id
             )  # type: ignore
             folders.extend(category_folders)

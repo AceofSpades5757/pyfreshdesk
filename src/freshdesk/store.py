@@ -1,4 +1,5 @@
 """Store Limit Information"""
+
 from __future__ import annotations
 
 import sqlite3
@@ -62,13 +63,18 @@ class LimitInfo:
         )
 
     def to_bytes(self) -> bytes:
-        return ";".join(map(str, [
-            self.timestamp.timestamp(),
-            self.calls_per_minute,
-            self.calls_remaining,
-            self.calls_consumed,
-            self.retry_time,
-        ])).encode(ENCODING)
+        return ";".join(
+            map(
+                str,
+                [
+                    self.timestamp.timestamp(),
+                    self.calls_per_minute,
+                    self.calls_remaining,
+                    self.calls_consumed,
+                    self.retry_time,
+                ],
+            )
+        ).encode(ENCODING)
 
 
 class LimitStore:

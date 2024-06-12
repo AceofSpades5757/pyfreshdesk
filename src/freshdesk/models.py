@@ -57,7 +57,11 @@ class Attachment:
             created_at=datetime.fromisoformat(data["created_at"][:-1]),
             updated_at=datetime.fromisoformat(data["updated_at"][:-1]),
             attachment_url=data["attachment_url"],
-            extras={key: value for key, value in data.items() if key not in cls.__dataclass_fields__},  # noqa: 501
+            extras={
+                key: value
+                for key, value in data.items()
+                if key not in cls.__dataclass_fields__
+            },  # noqa: 501
         )
         obj._json = data
 
@@ -66,6 +70,7 @@ class Attachment:
 
 class TicketStatus(IntEnum):
     """The status of a ticket."""
+
     OPEN = 2
     PENDING = 3
     RESOLVED = 4
@@ -402,7 +407,7 @@ class TicketFilter:
         Number: integer
         Checkbox: boolean
         Dropdown: string
-    
+
     Specs
     -----
 
@@ -813,7 +818,7 @@ class Agent:
     available_since: datetime
     id: int  # unique
     occasional: bool  # True: occasional, False: full-time
-    signature: str  = field(repr=False)  # HTML
+    signature: str = field(repr=False)  # HTML
     ticket_scope: int  # Permissions: 1 - Global, 2 - Group, 3 - Restricted
     # support_agent -> Support Agent
     # field_agent -> Field Agent
@@ -1183,4 +1188,3 @@ class ScenarioAutomation:
 
         obj = cls(**data)
         return obj
-
