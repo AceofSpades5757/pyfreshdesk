@@ -2,7 +2,7 @@
 repos:
   # Check YAML; Fix end of files; Fix trailing whitespace
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
+    rev: v5.0.0
     hooks:
       - id: check-yaml
         name: Check Yaml
@@ -21,7 +21,7 @@ repos:
           - --lines-after-imports=2
   # Python - Code Formatting
   - repo: https://github.com/psf/black
-    rev: 24.4.2
+    rev: 24.10.0
     hooks:
       - id: black
         name: Code Formatter (black)
