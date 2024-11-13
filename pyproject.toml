@@ -9,10 +9,10 @@ description = "Python client for Freshdesk API."
 requires-python = ">=3.6"
 license = { file = "LICENSE" }
 authors = [
-    { name = "Kyle L. Davis", email = "kyle.l.davis57@gmail.com" },
+    { name = "Kyle L. Davis", email = "aceofspades5757.github@gmail.com" },
 ]
 maintainers = [
-    { name = "Kyle L. Davis", email = "kyle.l.davis57@gmail.com" },
+    { name = "Kyle L. Davis", email = "aceofspades5757.github@gmail.com" },
 ]
 readme = "README.md"
 keywords = ["freshdesk", "api", "client"]
