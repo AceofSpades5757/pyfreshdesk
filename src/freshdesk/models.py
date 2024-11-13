@@ -67,6 +67,20 @@ class Attachment:
 
         return obj
 
+    def to_json(self) -> dict:
+        if self._json:
+            return self._json
+
+        return {
+            "id": self.id,
+            "name": str(self.name),
+            "content_type": self.content_type,
+            "size": self.size,
+            "created_at": self.created_at.isoformat()[:-6] + "Z",
+            "updated_at": self.updated_at.isoformat()[:-6] + "Z",
+            "attachment_url": self.attachment_url,
+        }
+
 
 class TicketStatus(IntEnum):
     """The status of a ticket."""
@@ -355,8 +369,28 @@ class CannedResponse:
         obj._json = original
         return obj
 
-    def to_json(self) -> dict[Any, Any]:
-        return self._json
+    def to_json(self) -> dict:
+        if self._json:
+            return self._json
+
+        attachments = None
+        if self.attachments:
+            attachments = [attachment.to_json() for attachment in self.attachments]
+
+        return {
+            "id": self.id,
+            "title": self.title,
+            "content": self.content,
+            "content_html": self.content_html,
+            "responses_count": self.responses_count,
+            "folder_id": self.folder_id,
+            "group_ids": self.group_ids,
+            "visibility": self.visibility,
+            "personal": self.personal,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+            "attachments": attachments,
+        }
 
 
 @dataclass
