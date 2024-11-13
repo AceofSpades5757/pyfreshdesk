@@ -248,12 +248,15 @@ class CannedResponseFolder:
         default=None, repr=False
     )
 
+    _json: Optional[dict] = field(default=None, repr=False)
+
     def __len__(self) -> int:
         return self.responses_count if self.responses_count is not None else len(self.canned_responses)  # type: ignore
 
     @classmethod
     def from_json(cls, data) -> CannedResponseFolder:
         original = deepcopy(data)
+
         # Parse Datetimes
         for key in ("created_at", "updated_at"):
             if data.get(key):
@@ -271,7 +274,21 @@ class CannedResponseFolder:
         return obj
 
     def to_json(self) -> dict:
-        return self._json
+        if self._json:
+            return self._json
+        
+        crs = None
+        if self.canned_responses:
+            crs = [cr.to_json() for cr in self.canned_responses]
+        return {
+            "id": self.id,
+            "name": self.name,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
+            "personal": self.personal,
+            "responses_count": self.responses_count,
+            "canned_responses": crs,
+        }
 
 
 class CannedResponseVisibility(enum.IntEnum):
