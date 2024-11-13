@@ -332,9 +332,27 @@ class CannedResponseAPI(BaseAPI):
 
         return canned_response
 
+    def update(self, id: Identifier, payload: dict[str, Any]) -> CannedResponse:
+        """Update a Canned Response."""
+        url = self.base_url + f"/{id}"
+        response = self._request(
+            method=HTTPRequestMethod.PUT, url=url, json=payload
+        )
+
+        data = response.json()
+        canned_response: CannedResponse = CannedResponse.from_json(data)
+
+        return canned_response
+
     @register_interface
     def canned_response(self, id: Identifier) -> CannedResponse:
         return self.view(id)
+
+    @register_interface
+    def update_canned_response(
+        self, id: Identifier, payload: dict[str, Any]
+    ) -> CannedResponse:
+        return self.update(id, payload)
 
 
 class CannedResponseFolderAPI(BaseAPI):
