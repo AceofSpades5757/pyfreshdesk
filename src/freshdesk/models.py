@@ -290,7 +290,7 @@ class CannedResponseFolder:
     def to_json(self) -> dict:
         if self._json:
             return self._json
-        
+
         crs = None
         if self.canned_responses:
             crs = [cr.to_json() for cr in self.canned_responses]
@@ -375,7 +375,9 @@ class CannedResponse:
 
         attachments = None
         if self.attachments:
-            attachments = [attachment.to_json() for attachment in self.attachments]
+            attachments = [
+                attachment.to_json() for attachment in self.attachments
+            ]
 
         return {
             "id": self.id,

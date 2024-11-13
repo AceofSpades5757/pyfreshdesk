@@ -332,7 +332,9 @@ class CannedResponseAPI(BaseAPI):
 
         return canned_response
 
-    def update(self, id: Identifier, payload: dict[str, Any]) -> CannedResponse:
+    def update(
+        self, id: Identifier, payload: dict[str, Any]
+    ) -> CannedResponse:
         """Update a Canned Response."""
         url = self.base_url + f"/{id}"
         response = self._request(
