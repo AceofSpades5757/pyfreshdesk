@@ -253,13 +253,14 @@ class CannedResponseFolder:
 
     @classmethod
     def from_json(cls, data) -> CannedResponseFolder:
+        original = deepcopy(data)
         # Parse Datetimes
         for key in ("created_at", "updated_at"):
             if data.get(key):
                 data[key] = datetime.fromisoformat(data[key][:-1])
 
         obj = cls(**data)
-        obj._json = data  # type: ignore
+        obj._json = original  # type: ignore
 
         if data.get("canned_responses"):
             obj.canned_responses = [
@@ -315,6 +316,8 @@ class CannedResponse:
 
     @classmethod
     def from_json(cls, data: dict):
+        original = deepcopy(data)
+
         # Parse Datetimes
         for key in ["created_at", "updated_at"]:
             if data.get(key):
@@ -332,7 +335,7 @@ class CannedResponse:
             ]
 
         obj = cls(**data)
-        obj._json = data
+        obj._json = original
         return obj
 
     def to_json(self) -> dict[Any, Any]:
@@ -761,6 +764,7 @@ class SolutionArticle:
 
     @classmethod
     def from_json(cls, data):
+        original = deepcopy(data)
         # Parse Datetime strings
         if data.get("created_at"):
             data["created_at"] = datetime.fromisoformat(
@@ -779,7 +783,7 @@ class SolutionArticle:
         data["status"] = SolutionArticleStatus(int(data["status"]))
 
         obj = cls(**data)
-        obj._json = data
+        obj._json = original
         return obj
 
 
@@ -845,19 +849,19 @@ class Agent:
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Agent:
-        copied_data = deepcopy(data)
+        original = deepcopy(data)
 
         # Parse Data Structures
-        copied_data["contact"] = Contact.from_json(data["contact"])
+        data["contact"] = Contact.from_json(data["contact"])
 
         # Remove any keys that are not in the dataclass, putting them into extras
         extras: dict[str, Any] = {}
-        for key in list(copied_data.keys()):
+        for key in list(data.keys()):
             if key not in cls.__dataclass_fields__:
-                extras[key] = copied_data.pop(key)
+                extras[key] = data.pop(key)
 
-        obj = cls(**copied_data, extras=extras)
-        obj._json = data
+        obj = cls(**data, extras=extras)
+        obj._json = original
 
         return obj
 
@@ -885,6 +889,7 @@ class Event:
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Event:
+        data = data.copy()
         # We cannot use keywords as attribute names.
         data["from_"] = data.pop("from")
         return cls(**data)
@@ -1179,7 +1184,7 @@ class ScenarioAutomation:
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> ScenarioAutomation:
         # Copy Data to avoid mutating the original
-        data = data.copy()
+        data = deepcopy(data)
 
         # Parse Actions
         actions = []
