@@ -1184,6 +1184,11 @@ class AutomationRule:
     automation_type_id: Optional[AutomationRuleType] = None
     meta: dict[str, Any] = field(default_factory=dict, repr=False)
 
+    # Extra Fields
+    extras: dict[str, Any] = field(default_factory=dict, repr=False)
+
+    _json: Optional[dict] = field(default=None, repr=False)
+
     @property
     def type(self) -> Optional[AutomationRuleType]:
         """Get the automation type."""
@@ -1198,6 +1203,7 @@ class AutomationRule:
     def from_json(cls, data: dict[str, Any]) -> AutomationRule:
         # Copy Data to avoid mutating the original
         data = data.copy()
+
         # Parse datetimes
         data["created_at"] = datetime.fromisoformat(
             data["created_at"][:-1]
@@ -1205,7 +1211,15 @@ class AutomationRule:
         data["updated_at"] = datetime.fromisoformat(
             data["updated_at"][:-1]
         ).astimezone(timezone.utc)
+
+        # Extras
+        data["extras"] = {}
+        for key in list(data.keys()):
+            if key not in cls.__dataclass_fields__:
+                data["extras"][key] = data.pop(key)
+
         obj = cls(**data)
+
         return obj
 
     def to_json(self) -> dict[str, Any]:
@@ -1215,6 +1229,10 @@ class AutomationRule:
         data["updated_at"] = data["updated_at"].isoformat()[:-6] + "Z"
         # Serialize enums
         data["automation_type_id"] = int(data["automation_type_id"])
+        # Extras
+        for key, value in data.pop("extras").items():
+            data[key] = value
+
         return data
 
 
