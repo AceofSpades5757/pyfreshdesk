@@ -269,20 +269,20 @@ class CannedResponseFolder:
 
     @classmethod
     def from_json(cls, data) -> CannedResponseFolder:
-        original = deepcopy(data)
+        copied = deepcopy(data)
 
         # Parse Datetimes
         for key in ("created_at", "updated_at"):
-            if data.get(key):
-                data[key] = datetime.fromisoformat(data[key][:-1])
+            if copied.get(key):
+                copied[key] = datetime.fromisoformat(copied[key][:-1])
 
-        obj = cls(**data)
-        obj._json = original  # type: ignore
+        obj = cls(**copied)
+        obj._json = data
 
-        if data.get("canned_responses"):
+        if copied.get("canned_responses"):
             obj.canned_responses = [
                 CannedResponse.from_json(canned_response)
-                for canned_response in data.get("canned_responses")
+                for canned_response in copied.get("canned_responses")
             ]
 
         return obj
@@ -347,26 +347,26 @@ class CannedResponse:
 
     @classmethod
     def from_json(cls, data: dict):
-        original = deepcopy(data)
+        copied = deepcopy(data)
 
         # Parse Datetimes
         for key in ["created_at", "updated_at"]:
-            if data.get(key):
-                data[key] = datetime.fromisoformat(data[key][:-1]).astimezone(
+            if copied.get(key):
+                copied[key] = datetime.fromisoformat(copied[key][:-1]).astimezone(
                     timezone.utc
                 )
 
-        if data.get("visibility"):
-            data["visibility"] = CannedResponseVisibility(data["visibility"])
+        if copied.get("visibility"):
+            copied["visibility"] = CannedResponseVisibility(copied["visibility"])
 
-        if data.get("attachments"):
-            data["attachments"] = [
+        if copied.get("attachments"):
+            copied["attachments"] = [
                 Attachment.from_json(attachment)
-                for attachment in data.get("attachments", [])
+                for attachment in copied.get("attachments", [])
             ]
 
-        obj = cls(**data)
-        obj._json = original
+        obj = cls(**copied)
+        obj._json = data
         return obj
 
     def to_json(self) -> dict:
@@ -817,26 +817,27 @@ class SolutionArticle:
 
     @classmethod
     def from_json(cls, data):
-        original = deepcopy(data)
+        copied = deepcopy(data)
+
         # Parse Datetime strings
-        if data.get("created_at"):
-            data["created_at"] = datetime.fromisoformat(
-                data["created_at"][:-1]
+        if copied.get("created_at"):
+            copied["created_at"] = datetime.fromisoformat(
+                copied["created_at"][:-1]
             ).astimezone(timezone.utc)
-        if data.get("updated_at"):
-            data["updated_at"] = datetime.fromisoformat(
-                data["updated_at"][:-1]
+        if copied.get("updated_at"):
+            copied["updated_at"] = datetime.fromisoformat(
+                copied["updated_at"][:-1]
             ).astimezone(timezone.utc)
-        if data.get("modified_at"):
-            data["modified_at"] = datetime.fromisoformat(
-                data["modified_at"][:-1]
+        if copied.get("modified_at"):
+            copied["modified_at"] = datetime.fromisoformat(
+                copied["modified_at"][:-1]
             ).astimezone(timezone.utc)
 
         # Convert SolutionArticleStatus
-        data["status"] = SolutionArticleStatus(int(data["status"]))
+        copied["status"] = SolutionArticleStatus(int(copied["status"]))
 
-        obj = cls(**data)
-        obj._json = original
+        obj = cls(**copied)
+        obj._json = data
         return obj
 
 
@@ -902,19 +903,19 @@ class Agent:
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> Agent:
-        original = deepcopy(data)
+        copied = deepcopy(data)
 
         # Parse Data Structures
-        data["contact"] = Contact.from_json(data["contact"])
+        copied["contact"] = Contact.from_json(copied["contact"])
 
         # Remove any keys that are not in the dataclass, putting them into extras
         extras: dict[str, Any] = {}
-        for key in list(data.keys()):
+        for key in list(copied.keys()):
             if key not in cls.__dataclass_fields__:
-                extras[key] = data.pop(key)
+                extras[key] = copied.pop(key)
 
-        obj = cls(**data, extras=extras)
-        obj._json = original
+        obj = cls(**copied, extras=extras)
+        obj._json = data
 
         return obj
 
@@ -1184,6 +1185,10 @@ class AutomationRule:
     automation_type_id: Optional[AutomationRuleType] = None
     meta: dict[str, Any] = field(default_factory=dict, repr=False)
 
+    extras: dict[str, Any] = field(default_factory=dict, repr=False)
+
+    _json: Optional[dict] = field(default=None, repr=False)
+
     @property
     def type(self) -> Optional[AutomationRuleType]:
         """Get the automation type."""
@@ -1196,16 +1201,26 @@ class AutomationRule:
 
     @classmethod
     def from_json(cls, data: dict[str, Any]) -> AutomationRule:
-        # Copy Data to avoid mutating the original
-        data = data.copy()
+        copied = deepcopy(data)
+
         # Parse datetimes
-        data["created_at"] = datetime.fromisoformat(
-            data["created_at"][:-1]
+        copied["created_at"] = datetime.fromisoformat(
+            copied["created_at"][:-1]
         ).astimezone(timezone.utc)
-        data["updated_at"] = datetime.fromisoformat(
-            data["updated_at"][:-1]
+        copied["updated_at"] = datetime.fromisoformat(
+            copied["updated_at"][:-1]
         ).astimezone(timezone.utc)
-        obj = cls(**data)
+
+        # Handle Extras
+        extras = {}
+        for key in list(copied.keys()):
+            if key not in cls.__dataclass_fields__:
+                extras[key] = copied.pop(key)
+
+        obj = cls(
+            **copied,
+            _json=data,
+        )
         return obj
 
     def to_json(self) -> dict[str, Any]:
