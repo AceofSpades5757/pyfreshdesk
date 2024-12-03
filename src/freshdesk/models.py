@@ -1185,6 +1185,7 @@ class AutomationRule:
     automation_type_id: Optional[AutomationRuleType] = None
     meta: dict[str, Any] = field(default_factory=dict, repr=False)
 
+    # Extra Fields
     extras: dict[str, Any] = field(default_factory=dict, repr=False)
 
     _json: Optional[dict] = field(default=None, repr=False)
@@ -1222,6 +1223,7 @@ class AutomationRule:
             extras=extras,
             _json=data,
         )
+
         return obj
 
     def to_json(self) -> dict[str, Any]:
@@ -1231,6 +1233,10 @@ class AutomationRule:
         data["updated_at"] = data["updated_at"].isoformat()[:-6] + "Z"
         # Serialize enums
         data["automation_type_id"] = int(data["automation_type_id"])
+        # Extras
+        for key, value in data.pop("extras").items():
+            data[key] = value
+
         return data
 
 
