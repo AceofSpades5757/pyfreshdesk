@@ -1219,6 +1219,7 @@ class AutomationRule:
 
         obj = cls(
             **copied,
+            extras=extras,
             _json=data,
         )
         return obj
