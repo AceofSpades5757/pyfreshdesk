@@ -238,13 +238,36 @@ class TicketConversation:
     last_edited_at: Optional[datetime]
     last_edited_user_id: Optional[int]
 
+    extras: dict[str, Any] = field(default_factory=dict)
     _json: Optional[dict] = field(default=None, repr=False)
 
     @classmethod
     def from_json(cls, data):
-        obj = cls(**data)
-        obj._json = data
-        return obj
+        copied = deepcopy(data)
+
+        # Parse Datetimes
+        for key in ["created_at", "updated_at", "last_edited_at"]:
+            if copied.get(key):
+                copied[key] = datetime.fromisoformat(copied[key][:-1])
+
+        # Parse Attachments
+        if copied.get("attachments"):
+            copied['attachments'] = [
+                Attachment.from_json(attachment)
+                for attachment in copied["attachments"]
+            ]
+
+        # Extras
+        extras = {}
+        for key in list(copied.keys()):
+            if key not in cls.__dataclass_fields__:
+                extras[key] = copied.pop(key)
+
+        return cls(
+            **copied,
+            extras=extras,
+            _json=data,
+        )
 
 
 @dataclass
