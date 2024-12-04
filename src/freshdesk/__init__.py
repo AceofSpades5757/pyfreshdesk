@@ -27,6 +27,7 @@ from freshdesk.models import AutomationRule
 from freshdesk.models import AutomationRuleType
 from freshdesk.models import CannedResponse
 from freshdesk.models import CannedResponseFolder
+from freshdesk.models import CannedResponseVisibility
 from freshdesk.models import Field
 from freshdesk.models import Group
 from freshdesk.models import Product
@@ -77,6 +78,7 @@ __all__ = (
     "Agent",
     "CannedResponse",
     "CannedResponseFolder",
+    "CannedResponseVisibility",
     "Client",
     "Field",
     "Group",
