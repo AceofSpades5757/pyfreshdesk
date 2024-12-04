@@ -681,9 +681,29 @@ class Group:
 
     unassigned_for: TimeDeltaString = ""
 
+    extras: dict[str, Any] = field(default_factory=dict)
+    _json: Optional[dict] = field(default=None, repr=False)
+
     @classmethod
     def from_json(cls, data):
-        obj = cls(**data)
+        copied = deepcopy(data)
+
+        # Parse Datetimes
+        copied["created_at"] = datetime.fromisoformat(
+            copied["created_at"][:-1]
+        ).astimezone(timezone.utc)
+        copied["updated_at"] = datetime.fromisoformat(
+            copied["updated_at"][:-1]
+        ).astimezone(timezone.utc)
+
+        # Extras
+        extras = {}
+        for key in list(copied.keys()):
+            if key not in cls.__dataclass_fields__:
+                extras[key] = copied.pop(key)
+
+        obj = cls(**copied, extras=extras, _json=data)
+
         return obj
 
 
