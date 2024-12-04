@@ -291,6 +291,10 @@ class GroupAPI(BaseAPI):
 
         return groups
 
+    @register_interface
+    def groups(self) -> list[Group]:
+        return self.list_all()
+
 
 class AgentAPI(BaseAPI):
     """API for Agents."""
