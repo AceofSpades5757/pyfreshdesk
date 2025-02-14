@@ -3,7 +3,6 @@ from __future__ import annotations
 import logging.config
 import os
 from datetime import datetime
-from pathlib import Path
 from types import SimpleNamespace
 from typing import Final
 from typing import Optional
@@ -18,14 +17,10 @@ from freshdesk.enumerators import Plan
 from freshdesk.enumerators import Resource
 from freshdesk.errors import AuthenticationError
 from freshdesk.logger import get_config
-from freshdesk.store import LimitInfo
-from freshdesk.store import LimitStore
+from freshdesk.limits import LimitInfo
 
 
 ENCODING: Final[str] = "utf-8"
-data_path = Path(__file__).parent.parent / "data"
-data_path.mkdir(exist_ok=True)
-STORE: Final[LimitStore] = LimitStore(str(data_path / "limits.db"))
 
 
 # Logging
@@ -153,9 +148,8 @@ class UnregisteredClient(BaseClient):
             retry_time=limit_info["retry_time"],
         )
 
-        # Store Limits
+        # Limit History
         self.limits.append(limits)
-        STORE.insert(limits)
 
         # Pagination, if applicable
         # The 'link' header in the response will hold the next page url if

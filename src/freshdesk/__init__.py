@@ -43,8 +43,6 @@ from freshdesk.models import SolutionFolderVisibility
 from freshdesk.models import Ticket
 from freshdesk.models import TicketConversation
 from freshdesk.models import TicketStatus
-from freshdesk.store import LimitStore
-from freshdesk.store import SQLiteURI
 from freshdesk.utilities import get_agent_by_name
 from freshdesk.utilities import get_date_query
 from freshdesk.utilities import get_date_range_query
@@ -105,9 +103,6 @@ __all__ = (
     "SolutionFolderVisibility",
     # Typing
     "SearchResults",
-    # DB Access
-    "LimitStore",
-    "SQLiteURI",
     # Utilities
     "get_ticket_agent",
     "get_agent_by_name",
