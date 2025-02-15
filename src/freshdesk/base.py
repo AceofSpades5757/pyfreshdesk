@@ -65,10 +65,13 @@ class Client(Protocol):
 
 class BaseClient(ABC):
     api: SimpleNamespace = SimpleNamespace()
+    _initialized: bool = False
 
     def __new__(cls, *args, **kwargs):
         instance = super().__new__(cls)
-        instance._initialize_apis()
+        if not cls._initialized:
+            instance._initialize_apis()
+            cls._initialized = True
         return instance
 
     def _initialize_apis(self) -> None:
