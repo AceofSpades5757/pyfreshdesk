@@ -198,6 +198,11 @@ class TicketAPI(BaseAPI):
 
         return conversations
 
+    @register_interface
+    def conversations(self, ticket_id: int) -> list[TicketConversation]:
+        logger.info(f"Getting conversations for ticket #{ticket_id}.")
+        return self.list_conversations(ticket_id)
+
     def update_ticket_(self, ticket_id: int, data: dict[str, Any]) -> Ticket:
         """Update a ticket based on ID and data.
 
